@@ -1,33 +1,26 @@
-import seabreeze
-seabreeze.use('pyseabreeze')
-
-from seabreeze.spectrometers import list_devices, Spectrometer
+from __future__ import print_function
+from spectrometer.spectrometer_capturer import SpectrometerCapturer
+#  #  from spectrometer.test_spectrometer import testSpectrometer
+#
+from arg_parser import parser
 
 from datetime import datetime
+import numpy as np
+import json
 
+if __name__ == "__main__":
+    arguments = parser.parse_args()
+    if  arguments.command=='r' or arguments.command =='run':
+        json_file = open(arguments.config_file)
+        configuration = json.load(json_file)
+        device:str = arguments.device if arguments.device else configuration["device"]
+        integration_time:int = arguments.integration_time if arguments.integration_time else configuration['integration_time_us']
+        export:bool = arguments.save if arguments.save else configuration["export_options"]["export"]
+        export_strategy:str = arguments.save_format if arguments.save_format else configuration["export_options"]["export_strategy"]
+        export_format:str = configuration["export_options"]["filename_format"]
 
-fileName = datetime.utcnow().strftime('%F--%T.%f')[:-3]
-
-spec = Spectrometer.from_first_available()
-print(spec)
-
-spec.integration_time_micros(100000)  # 0.1 seconds
-wavelengths_raw = spec.wavelengths()
-intensities_raw = spec.intensities()
-
-## eliminar datos por debajo de 640
-wavelengths = []
-intensities = []
-
-for i in range(len(wavelengths_raw)):
-    if wavelengths_raw[i]<0: continue
-    wavelengths.append(wavelengths_raw[i])
-    intensities.append(intensities_raw[i])
-
-dataFile = open("mediciones/"+fileName+".csv","w")
-for i in range(len(wavelengths)):
-    dataFile.write(str(wavelengths[i])+","+str(intensities[i])+"\n")
-
-plt.plot(wavelengths, intensities)
-plt.savefig("mediciones/"+fileName+".png")
-plt.show()
+        print(arguments)
+        print(device,integration_time,export,export_strategy,export_format)
+        #  device:str = configuration.device if configuration.device else arguments.device
+        capturer:SpectrometerCapturer = SpectrometerCapturer(device,integration_time,export,export_strategy,export_format)
+        print(capturer.getSpecter())

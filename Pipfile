@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 seatease = "*"
+python-rapidjson = "*"
 seabreeze = {extras = ["pyseabreeze"], version = "*"}
 
 [dev-packages]

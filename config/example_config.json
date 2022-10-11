@@ -1,0 +1,13 @@
+{
+  "calibration": {
+    "calibration_file": ""
+  },
+  "integration_time_us": 10000,
+  "device": "test",
+
+  "export_options":{
+    "export_strategy":"csv",
+    "export":true,
+    "filename_format":"%F--%T.%f"
+  }
+}
