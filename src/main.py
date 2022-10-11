@@ -1,6 +1,7 @@
-from __future__ import print_function
+from spectrometer.specter import readFromCSV
 from spectrometer.spectrometer_capturer import SpectrometerCapturer
 #  #  from spectrometer.test_spectrometer import testSpectrometer
+from spectrometer.calibrator import CalibraionrStrategy, NoCalibration,LineaerInterpolationCalibration
 #
 from arg_parser import parser
 
@@ -18,9 +19,10 @@ if __name__ == "__main__":
         export:bool = arguments.save if arguments.save else configuration["export_options"]["export"]
         export_strategy:str = arguments.save_format if arguments.save_format else configuration["export_options"]["export_strategy"]
         export_format:str = configuration["export_options"]["filename_format"]
-
-        print(arguments)
-        print(device,integration_time,export,export_strategy,export_format)
-        #  device:str = configuration.device if configuration.device else arguments.device
-        capturer:SpectrometerCapturer = SpectrometerCapturer(device,integration_time,export,export_strategy,export_format)
-        print(capturer.getSpecter())
+        
+        calibrator:CalibraionrStrategy = LineaerInterpolationCalibration(readFromCSV("calibrations/white.csv"),readFromCSV("calibrations/black.csv"))
+        #  calibrator:CalibraionrStrategy = NoCalibration()
+        capturer:SpectrometerCapturer = SpectrometerCapturer(device,integration_time,export,export_strategy,export_format,calibrator)
+        capturer.getSpecter()
+    elif  arguments.command=='c' or arguments.command =='calibrate':
+        pass   

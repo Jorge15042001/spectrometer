@@ -43,7 +43,6 @@ runParser.add_argument('-c','--config-file', type=str, default="config/example_c
 runParser.add_argument('-i','--integration-time', type=int,  help='run spectrometer with specific integration time')
 runParser.add_argument('-d','--device', type=str,   help='connect to an specific sensor')
 runParser.add_argument('-s','--save', type=bool_none, default="" ,  help='save measurement')
-#  runParser.add_argument('-s','--save',action="store_true", help='save measurement')
 runParser.add_argument('-f','--save-format', type=str,   help='format to save the measurement')
 
 
@@ -51,6 +50,7 @@ runParser.add_argument('-f','--save-format', type=str,   help='format to save th
 calibrationParser:argparse.ArgumentParser = subparsers.add_parser("calibrate",aliases=['c'],description="calibrate spectrometer",help="calibrate spectromemter")
 
 calibrationParser.add_argument('-l','--list-calibrations',action='store_true',help="list all available calibrations")
-calibrationParser.add_argument('-d','--device', type=str,  default='any', help='calibrate specific device')
-calibrationParser.add_argument('-o','--output', type=str,  default='default', help='name of calibration file')
-calibrationParser.add_argument('-s','--strategy', type=str,  default='b&w', help='calibration strategy')
+calibrationParser.add_argument('-c','--config-file', type=str, default="config/example_config.json",  help='run with specific config file')
+calibrationParser.add_argument('-d','--device', type=str,   help='calibrate specific device')
+calibrationParser.add_argument('-o','--output', type=str,   help='name of calibration file')
+calibrationParser.add_argument('-s','--strategy', type=str,   help='calibration strategy')

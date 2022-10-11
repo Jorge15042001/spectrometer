@@ -1,6 +1,8 @@
 {
   "calibration": {
-    "calibration_file": ""
+    "strategy":"linear-interpolation",
+    "black-background-file":"calibrations/black.csv",
+    "white-background-file":"calibrations/white.csv"
   },
   "integration_time_us": 10000,
   "device": "test",

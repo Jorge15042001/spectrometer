@@ -3,11 +3,13 @@ from .spectrometer import Spectrometer
 from .test_spectrometer import testSpectrometer
 from .spectrometer_physical import PhysicalSpectrometer,sbs
 from .specter import Specter
+from .calibrator import CalibraionrStrategy
 
 
 
 
 from datetime import datetime
+import numpy as np
 
 def dontSave(a:Specter,filename_format:str)->None:
     pass
@@ -39,10 +41,10 @@ def selectSaveStrategy(export:bool,saveStrategy:str,filename_format:str):
     
 
 class SpectrometerCapturer:
-    def __init__(self,device:str,integration_time:int,export_measurement:bool,export_strategy:str,filename_format:str) -> None:
+    def __init__(self,device:str,integration_time:int,export_measurement:bool,export_strategy:str,filename_format:str,calibrator:CalibraionrStrategy) -> None:
 
         self.spectrometer:Spectrometer = selectSpectrometer(device,integration_time) 
-        self.calibrate = lambda x:identity(x)
+        self.calibrator = calibrator
         self.save = selectSaveStrategy(export_measurement,export_strategy,filename_format)
 
 
@@ -57,6 +59,7 @@ class SpectrometerCapturer:
 
     def getSpecter(self):
         spec = self.spectrometer.read()
-        calibrated = self.calibrate(spec)
+        print(np.shape(spec.intensities))
+        calibrated = self.calibrator.calibrate(spec)
         self.save(calibrated)
         return spec
